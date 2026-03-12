@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# Trap Ctrl+C to kill background processes
+trap "echo ' Stopping services...'; kill 0" EXIT
+
+echo "Running commands..."
+
+# 1. Backend Setup
+echo "➔ [1/4] Setting up Backend Dependencies..."
+pip install -qq -r requirements.txt
+if [ $? -ne 0 ]; then
+    echo "❌ Basic pip install failed. Attempting to install core packages individually..."
+    pip install fastapi uvicorn pydantic numpy pandas torch
+fi
+
+# 2. Frontend Setup
+echo "➔ [2/4] Setting up Frontend Dependencies..."
+if [ -d "frontend" ]; then
+    cd frontend
+    # Silent install to keep terminal clean as requested
+    npm install --silent > /dev/null 2>&1
+    cd ..
+else
+    echo "❌ Frontend directory not found!"
+    exit 1
+fi
+
+# 3. Start Services
+echo "➔ [3/4] Starting Servers..."
+
+# Start Backend (Background)
+# We set pythonpath so it can find 'app'
+export PYTHONPATH=$PYTHONPATH:$(pwd)/backend
+uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000 > /dev/null 2>&1 &
+BACKEND_PID=$!
+
+# Start Frontend (Background)
+cd frontend
+npm run dev -- --host --port 5173 > /dev/null 2>&1 &
+FRONTEND_PID=$!
+cd ..
+
+# 4. Launch
+echo "➔ [4/4] Waiting for services to initialize..."
+sleep 5
+
+echo "✅ System Online."
+echo "   - Backend: http://127.0.0.1:8000"
+echo "   - Frontend: http://localhost:5173"
+
+# Open Browser (macOS specific 'open')
+open http://localhost:5173
+
+echo "================================================="
+echo "   App is running. Press CTRL+C to stop."
+echo "================================================="
+
+# Keep script running to maintain background processes
+wait

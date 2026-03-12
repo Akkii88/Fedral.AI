@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# run-web - Simple launcher for FEDRAL Website
+# Use this to open the web version directly.
+
+echo "------------------------------------------------"
+echo "🌐 STARTING FEDRAL WEB SYSTEM"
+echo "------------------------------------------------"
+
+# 1. Ensure Backend is running (Port 8000)
+if lsof -Pi :8000 -sTCP:LISTEN -t >/dev/null ; then
+    echo "✅ Backend already running on http://127.0.0.1:8000"
+else
+    echo "⚙️  Starting FEDRAL Backend (Port 8000)..."
+    export PYTHONPATH=$PYTHONPATH:$(pwd)/backend
+    ./.venv/bin/python -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000 > backend.log 2>&1 &
+    BACKEND_PID=$!
+    sleep 2
+fi
+
+# 2. Ensure Frontend is running (Port 5173)
+if lsof -Pi :5173 -sTCP:LISTEN -t >/dev/null ; then
+    echo "✅ Frontend already running on http://localhost:5173"
+else
+    echo "⚙️  Starting Frontend (Port 5173)..."
+    cd frontend
+    # Use nohup and disown to keep it running after the script exits
+    nohup npm run dev > ../frontend.log 2>&1 &
+    disown
+    cd ..
+    
+    # Wait for vite to actually be ready on the port
+    echo "   Waiting for frontend to initialize..."
+    for i in {1..15}; do
+        if lsof -Pi :5173 -sTCP:LISTEN -t >/dev/null ; then
+            break
+        fi
+        sleep 1
+    done
+fi
+
+# 3. Open in Browser
+echo "🌐 Opening FEDRAL.AI in your browser..."
+open http://localhost:5173
+
+echo ""
+echo "✨ FEDRAL.AI is ready!"
+echo "   - Web UI:  http://localhost:5173"
+echo "   - API:     http://localhost:8000"
+echo ""
+
+# Exit cleanly, leaving background processes running (standard for web dev)
+exit 0

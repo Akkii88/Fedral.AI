@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# run-electron - Simple launcher for FEDRAL Hospital Agent
+# Use this to open the Electron app directly.
+
+echo "------------------------------------------------"
+echo "🚀 STARTING FEDRAL HOSPITAL SYSTEM"
+echo "------------------------------------------------"
+
+# 1. Ensure Backend is running (Port 8000)
+if lsof -Pi :8000 -sTCP:LISTEN -t >/dev/null ; then
+    echo "✅ Backend already running on http://127.0.0.1:8000"
+else
+    echo "⚙️  Starting FEDRAL Backend (Port 8000)..."
+    export PYTHONPATH=$PYTHONPATH:$(pwd)/backend
+    ./.venv/bin/python -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000 > backend.log 2>&1 &
+    BACKEND_PID=$!
+    echo "   Backend started (PID: $BACKEND_PID)"
+    sleep 2
+fi
+
+# 2. Launch Electron App
+echo "💻 Launching Hospital Agent App..."
+cd desktop-agent
+
+# We use exec to replace the shell process with npm
+# This prevents SIGHUP issues and keeps the terminal focused on the app logs
+exec npm run electron:dev
