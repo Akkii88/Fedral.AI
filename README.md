@@ -118,6 +118,45 @@ Our experiments compare traditional centralized learning against our robust Fede
 
 ---
 
+## 🖥️ Fedral.AI Web Dashboard
+
+The central management console for federated learning experiments, hospital management, and compliance monitoring.
+
+![Dashboard](./project_screenshots/fedral-ai-website/01_dashboard.png)
+![Experiments](./project_screenshots/fedral-ai-website/02_experiments.png)
+![Hospitals](./project_screenshots/fedral-ai-website/03_hospitals.png)
+![Experiment Detail](./project_screenshots/fedral-ai-website/04_experiment_detail.png)
+![Clients](./project_screenshots/fedral-ai-website/05_clients.png)
+![Settings](./project_screenshots/fedral-ai-website/06_settings.png)
+![Compliance](./project_screenshots/fedral-ai-website/07_compliance.png)
+![Permissions](./project_screenshots/fedral-ai-website/08_permissions.png)
+![Test Your Data](./project_screenshots/fedral-ai-website/09_test_your_data.png)
+
+---
+
+## 🏥 Hospital Agent Desktop Application
+
+The desktop application used by participating hospitals to securely contribute their data to the federated learning network.
+
+![Welcome Screen](./project_screenshots/hospital-agents-ss/01_welcome_screen.png)
+![Data Upload](./project_screenshots/hospital-agents-ss/02_data_upload.png)
+![File Validation](./project_screenshots/hospital-agents-ss/03_file_validation.png)
+![CSV Guide](./project_screenshots/hospital-agents-ss/04_csv_guide.png)
+![Disease Support](./project_screenshots/hospital-agents-ss/05_disease_support.png)
+![Privacy Agreement](./project_screenshots/hospital-agents-ss/06_privacy_agreement.png)
+![AI Inference](./project_screenshots/hospital-agents-ss/07_ai_inference.png)
+![Analysis Results](./project_screenshots/hospital-agents-ss/08_analysis_results.png)
+![Report Generation](./project_screenshots/hospital-agents-ss/09_report_generation.png)
+![Testing Phase](./project_screenshots/hospital-agents-ss/10_testing_phase.png)
+![Validation](./project_screenshots/hospital-agents-ss/11_validation.png)
+![Tutorial](./project_screenshots/hospital-agents-ss/12_tutorial.png)
+![Contribution](./project_screenshots/hospital-agents-ss/13_contribution.png)
+![Thank You](./project_screenshots/hospital-agents-ss/14_thank_you.png)
+![Enhanced Report](./project_screenshots/hospital-agents-ss/15_enhanced_report.png)
+![Final Summary](./project_screenshots/hospital-agents-ss/16_final_summary.png)
+
+---
+
 ## 📄 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
