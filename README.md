@@ -17,35 +17,61 @@
 ### High-Level Design
 The system consists of a centralized **Federated Server** and multiple **Hospital Agent** nodes. Each node performs local training on its internal MIMIC-IV slice and shares only encrypted gradients or model weights.
 
-![System Architecture](./research_assets/system_architecture.png)
+```mermaid
+graph TD
+    subgraph Hospitals ["Hospital Clients (Local Nodes)"]
+        H1[Hospital A]
+        H2[Hospital B]
+        H3[Hospital N]
+    end
 
-### Detailed Architecture
-![Detailed Architecture](./research_assets/detailed_architecture.png)
+    subgraph FedServer ["Federated Training Server (Central Hub)"]
+        Aggregator[Global Model Aggregator]
+        Verifier[Robustness & Fairness Verifier]
+        Encrypter[Privacy Layer / DP]
+    end
 
-### System Workflow
-![System Workflow](./research_assets/system_architecture_flowchart.png)
+    subgraph Data ["MIMIC-IV Dataset (Local)"]
+        D1[(Patient Data A)]
+        D2[(Patient Data B)]
+        DN[(Patient Data N)]
+    end
+
+    H1 --- D1
+    H2 --- D2
+    H3 --- DN
+
+    H1 -- "Local Gradients" --> FedServer
+    H2 -- "Local Gradients" --> FedServer
+    H3 -- "Local Gradients" --> FedServer
+
+    FedServer -- "Aggregated Global Model" --> H1
+    FedServer -- "Aggregated Global Model" --> H2
+    FedServer -- "Aggregated Global Model" --> H3
+
+    style FedServer fill:#2c3e50,stroke:#3498db,stroke-width:4px,color:#fff
+    style Hospitals fill:#34495e,stroke:#bdc3c7,stroke-width:2px,color:#fff
+```
 
 ### Federated Training Workflow
 The training follows a recursive round-based approach to minimize communication overhead while maintaining privacy.
 
-![Training Workflow](./research_assets/training_workflow.png)
-
-### Training Sequence
-![Training Sequence](./research_assets/training_sequence_detailed.png)
+```mermaid
+flowchart LR
+    Start([Start FL Round]) --> Distribute[Distribute Global Model]
+    Distribute --> LocalTrain[Local Training on MIMIC-IV Data]
+    LocalTrain --> Aggregation[Secure Aggregation]
+    Aggregation --> PrivacyCheck[Privacy & DP Verification]
+    PrivacyCheck --> UpdateGlobal[Update Global Model]
+    UpdateGlobal --> NextRound{Next Round?}
+    NextRound -- Yes --> Distribute
+    NextRound -- No --> End([Final Biomarker Discovery])
+```
 
 ---
 
 ## 📊 Experiment Results
 Our experiments compare traditional centralized learning against our robust Federated Learning approach. The results show only a minimal (5%) loss in utility for a significant gain in privacy and robustness.
-
-### Privacy vs Utility Trade-off
-![Privacy Utility](./research_assets/privacy_utility_detailed.png)
-
-### Fairness Analysis
-![Fairness Gap](./research_assets/fairness_gap_chart_hd.png)
-
-### Concept: Silo vs Federated Learning
-![Silo vs FL](./research_assets/concept_silo_vs_fl_hd.png)
 
 | Scenario | Stability | Privacy Guarantee | Fairness Score | AUC Performance |
 | :--- | :--- | :--- | :--- | :--- |
@@ -53,20 +79,6 @@ Our experiments compare traditional centralized learning against our robust Fede
 | **FedAvg (Standard FL)** | Medium | None | Low | 0.92 |
 | **Fedral (Private - ε=1.0)** | High | **High** | High | 0.91 |
 | **Fedral (Robust Median)** | **Highest** | Medium | **High** | 0.93 |
-
----
-
-## 🧬 Biomarker Discovery
-Our federated learning approach enables discovery of critical ICU biomarkers while preserving patient privacy.
-
-### Biomarker Importance Ranking
-![Biomarker Importance](./research_assets/biomarker_importance.png)
-
-### Detailed Heatmap Analysis
-![Heatmap](./research_assets/heatmap_detailed.png)
-
-### CWMED Logic Framework
-![CWMED Logic](./research_assets/cwmed_logic_hd.png)
 
 ---
 
