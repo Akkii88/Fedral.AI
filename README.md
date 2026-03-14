@@ -1,6 +1,5 @@
 # FEDRAL.AI: Privacy-Preserving Federated Learning for ICU Biomarker Discovery
 
-![Project Hero Image](docs/hero_image.png)
 
 ## 📋 Overview
 **FEDRAL.AI** is a state-of-the-art privacy-preserving federated learning platform designed for robust and fair biomarker discovery in Intensive Care Units (ICUs). Leveraging the **MIMIC-IV** dataset, this project enables multiple healthcare institutions to collaborate on training high-performance AI models without ever sharing sensitive patient data.
