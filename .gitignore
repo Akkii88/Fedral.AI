@@ -46,3 +46,8 @@ Fedral_Project.zip
 uploads/
 results/
 temp/
+demo/data/
+*.csv
+!sample_patients.csv
+!biomarkers_*.csv
+
